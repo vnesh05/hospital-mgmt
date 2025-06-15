@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+<body>
+<h2>Add New Patient</h2>
+
+<form action="/patients/add" method="POST">
+  <input type="text" name="name" placeholder="Name" required><br>
+  <input type="text" name="age" placeholder="Age" required><br>
+  <input type="text" name="gender" placeholder="Gender" required><br>
+  <input type="text" name="bloodGroup" placeholder="Blood Group" required><br>
+  <input type="text" name="contactNumber" placeholder="Contact Number" required><br>
+  <input type="email" name="email" placeholder="Email" required><br>
+  <button type="submit">Add Patient</button>
+</form>
+
+<a href="/">Back to Home</a>
+</body>
+</html>

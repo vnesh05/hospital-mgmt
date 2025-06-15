@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+<body>
+    <h2>Doctors List</h2>
+
+<table cellpadding="10">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Specialization</th>
+      <th>Contact</th>
+      <th>Email</th>
+      <th>Experience</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% doctors.forEach(doctor => { %>
+      <tr>
+        <td><%= doctor.name %></td>
+        <td><%= doctor.specialization %></td>
+        <td><%= doctor.contactNumber %></td>
+        <td><%= doctor.email %></td>
+        <td><%= doctor.experience %> years</td>
+        <td><%= doctor.createdAt.toDateString() %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<a href="/doctors/add">➕ Add Doctor</a>
+<br>
+<a href="/">🏠 Back to Home</a>
+</body>
+</html>

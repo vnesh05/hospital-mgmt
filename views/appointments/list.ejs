@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
+ </head>
+<body>
+    <h2>Appointments List</h2>
+
+<table cellpadding="10">
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Doctor</th>
+      <th>Date</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Created</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% appointments.forEach(a => { %>
+    <tr>
+      <td><%= a.patient.name %></td>
+      <td><%= a.doctor.name %></td>
+      <td><%= a.appointmentDate.toDateString() %></td>
+      <td><%= a.reason %></td>
+      <td><%= a.status %></td>
+      <td><%= a.createdAt.toDateString() %></td>
+      <td>
+        <form action="/appointments/delete" method="POST" style="display:inline;">
+          <input type="hidden" name="id" value="<%= a._id %>">
+          <button type="submit">❌ Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
+
+</table>
+
+<a href="/appointments/add">➕ Schedule Appointment</a>
+<br>
+<a href="/">🏠 Back to Home</a>
+</body>
+</html>
