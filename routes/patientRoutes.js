@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const Doctor = require("../models/doctor");
+
 const {
   getPatients,
   getUpdatePatient,
@@ -15,9 +17,11 @@ const Appointment = require("../models/appointment");
 router.get("/list", requireAuth, getPatients);
 
 // ---- Show Add Patient Form (admin only)
-router.get("/add", requireAuth, requireRole("admin"), (req, res) => {
-  res.render("patients/add", { user: req.user });
+router.get("/add", requireAuth, requireRole("admin"), async (req, res) => {
+  const doctors = await Doctor.find();
+  res.render("patients/add", { user: req.user, doctors });
 });
+
 
 // ---- Handle add patient form submission (admin only)
 router.post("/add", requireAuth, requireRole("admin"), addPatient);
