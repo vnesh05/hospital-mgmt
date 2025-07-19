@@ -5,32 +5,36 @@ const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
 const { addAppointment, getAppointments, deleteAppointment } = require("../controllers/appointmentController");
 
+// IMPORTANT: Auth/role middleware -- update the import path as per your setup!
+const { requireAuth } = require("../middleware/auth");
+
 // Show form to schedule appointment
-router.get("/add", async (req, res) => {
+router.get("/add", requireAuth, async (req, res) => {
   try {
-    const patients = await Patient.find();
+    let patients = [];
+    if (req.user.role === 'admin') {
+      patients = await Patient.find();
+    } else if (req.user.role === 'patient') {
+      // Only allow the logged-in patient to book for themselves
+      const patient = await Patient.findById(req.user.patient);
+      patients = patient ? [patient] : [];
+    }
+    // If you want doctors to book appointments, you could further customize here
+
     const doctors = await Doctor.find();
-    res.render("appointments/add", { patients, doctors });
+    res.render("appointments/add", { patients, doctors, user: req.user });
   } catch (err) {
     res.status(500).send("Error loading appointment form.");
   }
 });
 
-// Handle appointment form submission
-router.post("/add", addAppointment);
+// Handle appointment form submission (controller ensures role logic)
+router.post("/add", requireAuth, addAppointment);
 
-// View appointments list (EJS)
-router.get("/view", async (req, res) => {
-  try {
-    const appointments = await Appointment.find()
-      .populate("patient")
-      .populate("doctor");
-    res.render("appointments/list", { appointments });
-  } catch (err) {
-    res.status(500).send("Error loading appointments.");
-  }
-});
+// View appointments list (filtered in controller)
+router.get("/view", requireAuth, getAppointments);
 
-router.post('/delete', deleteAppointment);
+// Delete appointment (filtered in controller)
+router.post("/delete", requireAuth, deleteAppointment);
 
 module.exports = router;

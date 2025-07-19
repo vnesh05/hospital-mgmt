@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Hospital System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">🔒 Login</h2>
+    <% if (typeof error !== "undefined" && error) { %>
+      <div class="mb-4 text-red-600 text-center"><%= error %></div>
+    <% } %>
+    <form action="/login" method="POST" class="space-y-5">
+      <div>
+        <label for="username" class="block mb-1 text-gray-700">Username or Email</label>
+        <input type="text" id="username" name="username" required
+               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="password" class="block mb-1 text-gray-700">Password</label>
+        <input type="password" id="password" name="password" required
+               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <button type="submit"
+        class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium text-lg transition duration-200">
+        Sign In
+      </button>
+    </form>
+    <div class="mt-4 text-center">
+      <a href="/register"
+         class="inline-block bg-gray-100 hover:bg-gray-200 text-indigo-700 px-4 py-2 rounded-md font-medium transition">
+        ➕ Create New User
+      </a>
+    </div>
+  </div>
+</body>
+</html>

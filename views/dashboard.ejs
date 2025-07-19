@@ -26,15 +26,19 @@
             <span class="text-xs text-gray-500">Status: <%= app.status %></span>
           </li>
         <% }) %>
+        <% if (!appointments.length) { %>
+          <li class="text-center text-gray-400 py-10">No upcoming appointments.</li>
+        <% } %>
       </ul>
-      
       <!-- Appointment Action Icons -->
       <div class="mt-4 flex gap-2 justify-center">
-        <a href="/appointments/add" class="bg-blue-100 hover:bg-blue-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
-          <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📅</div>
-          <div class="text-xs font-medium text-blue-700">Add</div>
-        </a>
-        
+        <% // Patients & admins can schedule; doctors can if your rules allow %>
+        <% if (user.role === "admin" || user.role === "patient" || user.role === "doctor") { %>
+          <a href="/appointments/add" class="bg-blue-100 hover:bg-blue-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📅</div>
+            <div class="text-xs font-medium text-blue-700">Add</div>
+          </a>
+        <% } %>
         <a href="/appointments/view" class="bg-blue-100 hover:bg-blue-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
           <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">📋</div>
           <div class="text-xs font-medium text-blue-700">View All</div>
@@ -44,7 +48,7 @@
     
     <!-- Patients Panel -->
     <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold mb-4 text-blue-700">👨‍⚕️ Top 5 Oldest Patients</h2>
+      <h2 class="text-xl font-semibold mb-4 text-blue-700">🧑 Top 5 Oldest Patients</h2>
       <ul class="space-y-2">
         <% patients.forEach(patient => { %>
           <li class="border p-3 rounded flex justify-between">
@@ -52,15 +56,18 @@
             <span class="text-gray-600 text-sm"><%= patient.age %> yrs</span>
           </li>
         <% }) %>
+        <% if (!patients.length) { %>
+          <li class="text-center text-gray-400 py-10">No patient data.</li>
+        <% } %>
       </ul>
-      
       <!-- Patient Action Icons -->
       <div class="mt-4 flex gap-2 justify-center">
-        <a href="/patients/add" class="bg-green-100 hover:bg-green-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
-          <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👤</div>
-          <div class="text-xs font-medium text-green-700">Add</div>
-        </a>
-        
+        <% if (user.role === "admin") { %>
+          <a href="/patients/add" class="bg-green-100 hover:bg-green-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👤</div>
+            <div class="text-xs font-medium text-green-700">Add</div>
+          </a>
+        <% } %>
         <a href="/patients/view" class="bg-green-100 hover:bg-green-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
           <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👥</div>
           <div class="text-xs font-medium text-green-700">View All</div>
@@ -72,24 +79,25 @@
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-semibold mb-4 text-blue-700">🏥 Top 3 Most Experienced Doctors</h2>
       <ul class="space-y-2">
-<% doctors.forEach(doc => { %>
-  <li class="border p-3 rounded flex flex-col">
-    <span class="font-medium"><%= doc.name %></span>
-    <span class="text-sm text-gray-600"><%= doc.specialization %></span>
-    <span class="text-xs text-gray-500">Exp: <%= doc.experience %> yrs</span>
-  </li>
-<% }) %>
-
-
+        <% doctors.forEach(doc => { %>
+          <li class="border p-3 rounded flex flex-col">
+            <span class="font-medium"><%= doc.name %></span>
+            <span class="text-sm text-gray-600"><%= doc.specialization %></span>
+            <span class="text-xs text-gray-500">Exp: <%= doc.experience %> yrs</span>
+          </li>
+        <% }) %>
+        <% if (!doctors.length) { %>
+          <li class="text-center text-gray-400 py-10">No doctor data.</li>
+        <% } %>
       </ul>
-      
       <!-- Doctor Action Icons -->
       <div class="mt-4 flex gap-2 justify-center">
-        <a href="/doctors/add" class="bg-purple-100 hover:bg-purple-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
-          <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍⚕️</div>
-          <div class="text-xs font-medium text-purple-700">Add</div>
-        </a>
-        
+        <% if (user.role === "admin") { %>
+          <a href="/doctors/add" class="bg-purple-100 hover:bg-purple-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍⚕️</div>
+            <div class="text-xs font-medium text-purple-700">Add</div>
+          </a>
+        <% } %>
         <a href="/doctors/view" class="bg-purple-100 hover:bg-purple-200 rounded-lg p-3 text-center transition-all duration-200 group flex-1">
           <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🩺</div>
           <div class="text-xs font-medium text-purple-700">View All</div>
@@ -97,26 +105,21 @@
       </div>
     </div>
   </div>
-<div class="flex justify-center items-center w-full mt-5">
-  <div id="clock" class="text-2xl font-bold"></div>
-</div>
+  <!-- Clock -->
+  <div class="flex justify-center items-center w-full mt-8">
+    <div id="clock" class="text-2xl font-bold"></div>
+  </div>
   <script>
-  function updateClock() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    const timeString = `${hours}:${minutes}:${seconds}`;
-    document.getElementById('clock').textContent = timeString;
-  }
-
-  // Update every second
-  setInterval(updateClock, 1000);
-
-  // Initialize immediately on load
-  updateClock();
-</script>
-
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const timeString = `${hours}:${minutes}:${seconds}`;
+      document.getElementById('clock').textContent = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>

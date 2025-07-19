@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/styles.css">
-
+  <meta charset="UTF-8">
+  <title>Add Doctor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h2>Add Doctor</h2>
-
-<form action="/doctors/add" method="POST">
-  <label>Name:</label><br>
-  <input type="text" name="name" placeholder="Doctor Name" required><br><br>
-
-  <label>Specialization:</label><br>
-  <input type="text" name="specialization" placeholder="Specialization" required><br><br>
-
-  <label>Contact Number:</label><br>
-  <input type="text" name="contactNumber" placeholder="Contact Number" required><br><br>
-
-  <label>Email:</label><br>
-  <input type="email" name="email" placeholder="Email" required><br><br>
-
-  <label>Experience (years):</label><br>
-  <input type="number" name="experience" placeholder="Years of Experience" required><br><br>
-
-  <button type="submit">Add Doctor</button>
-</form>
-
-<a href="/">🏠 Back to Home</a>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container max-w-lg mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Add Doctor</h2>
+    <form action="/doctors/add" method="POST" class="bg-white rounded-lg shadow-lg p-6 space-y-5">
+      <div>
+        <label class="block mb-1 font-medium">Name:</label>
+        <input type="text" name="name" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Specialization:</label>
+        <input type="text" name="specialization" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Contact Number:</label>
+        <input type="text" name="contactNumber" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Email:</label>
+        <input type="email" name="email" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Experience (years):</label>
+        <input type="number" name="experience" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Username (for login):</label>
+        <input type="text" name="username" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Password (for login):</label>
+        <input type="password" name="password" required minlength="4" class="w-full px-3 py-2 border rounded" />
+      </div>
+      <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded">Add Doctor</button>
+    </form>
+    <div class="mt-6 text-center">
+      <a href="/doctors/view" class="text-gray-700 hover:underline">← Back to Doctor List</a>
+    </div>
+  </div>
 </body>
 </html>

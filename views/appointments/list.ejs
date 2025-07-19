@@ -1,49 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/styles.css">
- </head>
-<body>
-    <h2>Appointments List</h2>
-
-<table cellpadding="10">
-  <thead>
-    <tr>
-      <th>Patient</th>
-      <th>Doctor</th>
-      <th>Date</th>
-      <th>Reason</th>
-      <th>Status</th>
-      <th>Created</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-  <% appointments.forEach(a => { %>
-    <tr>
-      <td><%= a.patient.name %></td>
-      <td><%= a.doctor.name %></td>
-      <td><%= a.appointmentDate.toDateString() %></td>
-      <td><%= a.reason %></td>
-      <td><%= a.status %></td>
-      <td><%= a.createdAt.toDateString() %></td>
-      <td>
-        <form action="/appointments/delete" method="POST" style="display:inline;">
-          <input type="hidden" name="id" value="<%= a._id %>">
-          <button type="submit">❌ Delete</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</tbody>
-
-</table>
-
-<a href="/appointments/add">➕ Schedule Appointment</a>
-<br>
-<a href="/">🏠 Back to Home</a>
+  <meta charset="UTF-8">
+  <title>Appointments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 py-6">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Appointments</h2>
+    <div class="flex justify-between items-center mb-4">
+      <a href="/appointments/add" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md">
+        ➕ Schedule New
+      </a>
+      <a href="/" class="text-sm text-gray-500 hover:underline">🏠 Home</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white rounded-lg shadow">
+        <thead>
+          <tr>
+            <th class="py-2 px-4">Patient</th>
+            <th class="py-2 px-4">Doctor</th>
+            <th class="py-2 px-4">Date</th>
+            <th class="py-2 px-4">Reason</th>
+            <th class="py-2 px-4">Status</th>
+            <% if (user.role === "admin" || user.role === "doctor" || user.role === "patient") { %>
+              <th class="py-2 px-4">Action</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% appointments.forEach(app => { %>
+            <tr class="border-t">
+              <td class="py-2 px-4"><%= app.patient?.name %></td>
+              <td class="py-2 px-4"><%= app.doctor?.name %> <span class="text-xs text-gray-400">(<%= app.doctor?.specialization %>)</span></td>
+              <td class="py-2 px-4"><%= app.appointmentDate?.toLocaleDateString ? app.appointmentDate.toLocaleDateString() : app.appointmentDate.substring(0,10) %></td>
+              <td class="py-2 px-4"><%= app.reason %></td>
+              <td class="py-2 px-4"><span class="px-2 py-1 rounded bg-indigo-100 text-indigo-900"><%= app.status %></span></td>
+              <% 
+                // Only show delete button if user is admin, or if (doctor and their own), or (patient and their own)
+                let canDelete = false;
+                if (user.role === "admin") canDelete = true;
+                if (user.role === "doctor" && app.doctor && String(app.doctor._id) === String(user.doctor)) canDelete = true;
+                if (user.role === "patient" && app.patient && String(app.patient._id) === String(user.patient)) canDelete = true;
+              %>
+              <% if (canDelete) { %>
+                <td class="py-2 px-4">
+                  <form action="/appointments/delete" method="POST" onsubmit="return confirm('Are you sure you want to cancel this appointment?')">
+                    <input type="hidden" name="id" value="<%= app._id %>" />
+                    <button type="submit" class="text-red-700 hover:underline">Delete</button>
+                  </form>
+                </td>
+              <% } %>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% if (!appointments.length) { %>
+        <div class="mt-8 text-center text-gray-600">No appointments found.</div>
+      <% } %>
+    </div>
+  </div>
 </body>
 </html>
